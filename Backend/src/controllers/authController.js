@@ -1,5 +1,5 @@
 const AuthService = require("../services/authService");
-const { RegisterDTO } = require("../dtos/auth.dto");
+const { RegisterDTO, LoginDTO } = require("../dtos/auth.dto");
 
 class AuthController {
   static async register(req, res) {
@@ -26,6 +26,30 @@ class AuthController {
       });
     } catch (error) {
       res.status(400).json({ error: error.message });
+    }
+  }
+
+  static async login(req, res) {
+    try {
+      const loginData = new LoginDTO(req.body);
+      const validationErrors = loginData.validate();
+
+      if (validationErrors.length > 0) {
+        return res.status(400).json({ errors: validationErrors });
+      }
+
+      const loginResult = await AuthService.loginUser(
+        loginData.username,
+        loginData.password,
+      );
+
+      res.status(200).json({
+        message: "Login successfully",
+        token: loginResult.token,
+        user: loginResult.user,
+      });
+    } catch (error) {
+      res.status(401).json({ error: error.message });
     }
   }
 }

@@ -24,4 +24,25 @@ class RegisterDTO {
   }
 }
 
-module.exports = { RegisterDTO };
+class LoginDTO {
+  constructor(data) {
+    this.username = data.username;
+    this.password = data.password;
+  }
+
+  validate() {
+    let errors = [];
+
+    if (!this.username) {
+      errors.push("Please enter your username");
+    }
+
+    if (!this.password) {
+      errors.push("Please enter your password");
+    }
+
+    return errors;
+  }
+}
+
+module.exports = { RegisterDTO, LoginDTO };
